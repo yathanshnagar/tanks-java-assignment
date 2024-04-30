@@ -50,12 +50,14 @@ public class App extends PApplet {
     }
 
     /**
-     * Load all resources such as images. Initialise the elements such as the player, enemies and map elements.
+     * Load all resources such as images. Initialise the elements such as the player and map elements.
      */
 	@Override
     public void setup() {
         frameRate(FPS);
-
+		//See PApplet javadoc:
+		//loadJSONObject(configPath)
+		//loadImage(this.getClass().getResource(filename).getPath().toLowerCase(Locale.ROOT).replace("%20", " "));
     }
 
     /**
@@ -76,7 +78,7 @@ public class App extends PApplet {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        //TODO - powerups, like repair and extra fuel and teleport? - or maybe leave this as an extension
+        //TODO - powerups, like repair and extra fuel and teleport
 
 
     }
