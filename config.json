@@ -10,6 +10,7 @@
       "layout": "level2.txt",
       "background": "desert.png",
       "foreground-colour": "234,221,181",
+      "trees": "tree1.png"
     },
     {
       "layout": "level3.txt",

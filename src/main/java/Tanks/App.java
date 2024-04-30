@@ -29,6 +29,9 @@ public class App extends PApplet {
 
     public static final int INITIAL_PARACHUTES = 1;
 
+    PImage backgroundImage;
+    JSONObject config;
+
     public static final int FPS = 30;
 
     public String configPath;
@@ -55,6 +58,11 @@ public class App extends PApplet {
 	@Override
     public void setup() {
         frameRate(FPS);
+        config = loadJSONObject(configPath);
+        JSONArray levels = config.getJSONArray("levels");
+        JSONObject level1 = levels.getJSONObject(0);
+        String backgroundImagePath = "src/main/resources/Tanks/" + level1.getString("background");
+        backgroundImage = loadImage(backgroundImagePath);
 		//See PApplet javadoc:
 		//loadJSONObject(configPath)
 		//loadImage(this.getClass().getResource(filename).getPath().toLowerCase(Locale.ROOT).replace("%20", " "));
@@ -93,6 +101,8 @@ public class App extends PApplet {
      */
 	@Override
     public void draw() {
+
+        image(backgroundImage, 0, 0); // Draw background image at (0, 0) coordinates
         
 
         //----------------------------------
