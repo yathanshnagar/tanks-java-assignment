@@ -32,14 +32,14 @@ public class App extends PApplet {
     PImage backgroundImage;
     JSONObject config;
 
-    private int[] terrain;
-
     public static final int FPS = 30;
 
     public String configPath;
 
     public static Random random = new Random();
-	
+
+    private Terrain terrain;
+
 	// Feel free to add any additional methods or attributes you want. Please put classes in different files.
 
     public App() {
@@ -65,71 +65,17 @@ public class App extends PApplet {
         JSONObject level1 = levels.getJSONObject(0);
         String backgroundImagePath = "src/main/resources/Tanks/" + level1.getString("background");
         backgroundImage = loadImage(backgroundImagePath);
+
+        // In the setup method
+        String levelFilePath = "level1.txt"; // Replace with the appropriate level file path
+        terrain = new Terrain(levelFilePath);
+
 		//See PApplet javadoc:
 		//loadJSONObject(configPath)
 		//loadImage(this.getClass().getResource(filename).getPath().toLowerCase(Locale.ROOT).replace("%20", " "));
-
-         // Load the level layout from the file
-        String layoutFilePath = sketchPath("level1.txt");
-        String[] lines = loadStrings(layoutFilePath);
-
-        // Convert the layout to height values
-        terrain = new int[BOARD_WIDTH * BOARD_HEIGHT];
-        int index = 0;
-        for (int y = 0; y < BOARD_HEIGHT; y++) {
-            if (y >= lines.length) break; // Stop if we run out of lines
-            String line = lines[y];
-            for (int x = 0; x < BOARD_WIDTH; x++) {
-                if (x >= line.length()) break; // Stop if we run out of characters in the line
-                char c = line.charAt(x);
-                terrain[index++] = getHeightFromChar(c);
-        }
     }
 
-        // Apply moving average filter twice to smooth the terrain
-        terrain = applyMovingAverage(terrain, CELLAVG);
-        terrain = applyMovingAverage(terrain, CELLAVG);
 
-        System.out.println("Smoothed Terrain Values:");
-        for (int i = 0; i < terrain.length; i++) {
-            System.out.print(terrain[i] + " ");
-            if ((i + 1) % BOARD_WIDTH == 0) {
-                System.out.println();
-            }
-        }
-
-    }
-
-    private int getHeightFromChar(char c) {
-        // Map characters to height values
-        switch (c) {
-            case 'X': return CELLHEIGHT;
-            case 'T': return CELLHEIGHT / 2;
-            case 'B': return CELLHEIGHT;
-            case 'A': return CELLHEIGHT;
-            case 'C': return CELLHEIGHT;
-            case 'D': return CELLHEIGHT;
-            case ' ': return 0;
-            // Add more cases for other characters if needed
-            default: return 0;
-        }
-    }
-
-    private int[] applyMovingAverage(int[] values, int windowSize) {
-        int[] smoothedValues = new int[values.length];
-        for (int i = 0; i < values.length; i++) {
-            int start = Math.max(0, i - windowSize / 2);
-            int end = Math.min(values.length, i + windowSize / 2 + 1);
-            int sum = 0;
-            int count = 0;
-            for (int j = start; j < end; j++) {
-                sum += values[j];
-                count++;
-            }
-            smoothedValues[i] = sum / count;
-        }
-        return smoothedValues;
-    }
 
     /**
      * Receive key pressed signal from the keyboard.
@@ -166,19 +112,9 @@ public class App extends PApplet {
     public void draw() {
 
         image(backgroundImage, 0, 0); // Draw background image at (0, 0) coordinates
-
-        // Draw the terrain
-        stroke(255); // Set the stroke color to white
-        for (int x = 0; x < BOARD_WIDTH; x++) {
-            for (int y = BOARD_HEIGHT - 1; y >= 0; y--) {
-                int index = y * BOARD_WIDTH + x;
-                int terrainHeight = terrain[index];
-                int posX = x * CELLSIZE;
-                int posY = HEIGHT - CELLSIZE - terrainHeight;
-                rect(posX, posY, CELLSIZE, terrainHeight);
-            }
-        }
         
+        // In the draw method
+        terrain.render(this);
 
         //----------------------------------
         //display HUD:
