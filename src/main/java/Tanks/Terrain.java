@@ -84,6 +84,7 @@ public class Terrain {
             for (int col = 0; col < BOARD_WIDTH; col++) {
                 System.out.print(levelLayout[row][col]);
             }
+            
             System.out.println();
         }
     }
