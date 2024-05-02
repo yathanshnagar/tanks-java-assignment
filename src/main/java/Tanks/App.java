@@ -69,6 +69,7 @@ public class App extends PApplet {
         // In the setup method
         String levelFilePath = "level1.txt"; // Replace with the appropriate level file path
         terrain = new Terrain(levelFilePath);
+        terrain.printTerrainLayout();
 
 		//See PApplet javadoc:
 		//loadJSONObject(configPath)
